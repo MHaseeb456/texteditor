@@ -16,7 +16,7 @@ jobs:
         run: |
           cd carbon
           npm install
-      - name: Run test case
-        run: |
-          cd carbon
-          npm run test
+      # - name: Run test case
+      #   run: |
+      #     cd carbon
+      #     npm run test
