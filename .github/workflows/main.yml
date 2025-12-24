@@ -6,8 +6,10 @@ jobs:
     steps:
       - name: get code
         uses: actions/checkout@v6.0.1
-      - name: install node js
+      - name: install old node js
         uses: actions/setup-node@v6.1.0
+        with:
+          node-version: '8.17.0'  # Try 6.x or 8.x
       - name: node version
         run: node -v
       - name: install dependencies
