@@ -1,0 +1,60 @@
+/**
+ * Styles for editor demo
+ */
+
+body {
+  margin: 0;
+  font-size: 20px;
+}
+
+#container {
+  margin: 0 auto;
+}
+
+#article-preview {
+  margin: 2em auto;
+}
+
+#model-viewer {
+  margin-left: 50%;
+  background: #eee;
+  padding: 1em;
+  word-wrap: break-word;
+  white-space: pre;
+  margin-top: 0;
+  height: 100%;
+  position: fixed;
+  overflow: auto;
+  font-size: 0.7em;
+  width: 50%;
+}
+
+#editor {
+  margin: 2em auto;
+  width: 50%;
+  float: left;
+  box-sizing: border-box;
+}
+
+.container-full #editor {
+  width: 100%;
+  float: none;
+}
+
+#editor .carbon .layout-single-column,
+#editor .carbon .layout-float-left,
+#editor .carbon .layout-float-right {
+  padding: 0 1em;
+}
+
+@media only screen and (max-width: 700px) {
+  #model-viewer {
+    display: none;
+  }
+
+  #editor {
+    float: none;
+    width: auto;
+    margin: 2em 0;
+  }
+}

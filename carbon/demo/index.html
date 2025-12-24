@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Editor demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./assets/normalize.css" />
+    <link rel="stylesheet" href="./assets/main.css" />
+    <link rel="stylesheet" href="../dist/carbon.css" />
+    <link href="libs/json-tree/css/jsontree.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="libs/json-tree/jsontree.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+      <div id="editor">
+      </div>
+      <!--
+        Print side by side the internal model to illustrate how Carbon Editor
+        store and updates the model.
+
+        TODO(mkhatib):
+        Possibly also allow editing the model and reflecting that as DOM
+        changes in the editor.
+       -->
+      <pre id="model-viewer">
+      </pre>
+    </div>
+
+    <script src="libs/webcamjs/webcam.js"></script>
+    <script src="../dist/carbon.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script src="./assets/gcs.js"></script>
+    <script type="text/javascript">
+      GCS.init({
+        clientId: '950846180877-cqmh4098gben0k46d740ibdvrp46cf14.apps.googleusercontent.com',
+        bucket: 'carbon-demo-user-uploads',
+        project: 'manshar-backend',
+        group: '',
+        apiKey: 'AIzaSyBmND_wkbPmOumUIWlO4Ew9QU52gSvfLD8'
+      });
+    </script>
+    <script>
+      carbon.MonacoEditor.setScriptPath('node_modules/monaco-editor/min/vs', true);
+
+      var demoArticle;
+      var storedArticle = localStorage.getItem('article');
+      if (storedArticle) {
+        try {
+          demoArticle = carbon.Article.fromJSON(JSON.parse(storedArticle));
+        } catch (e) {
+          console.error('Error with the loading saved article.' +
+              'This is probably due to backward-incompatability.');
+        }
+      }
+
+      if (!demoArticle) {
+        demoArticle = new carbon.Article({
+          sections: [new carbon.Section({
+            components: [
+              new carbon.Layout({
+                components: [
+                  new carbon.Paragraph({
+                    placeholderText: 'Carbon Editor Demo',
+                    text: 'Welcome to Carbon',
+                    paragraphType: carbon.Paragraph.Types.MainHeader
+                  }),
+                  new carbon.Paragraph({
+                    placeholderText: 'This is just a demo.',
+                    text: 'A rich and beautiful editor in the browser',
+                    paragraphType: carbon.Paragraph.Types.ThirdHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Play around and see the internal model of the' +
+                      ' article being displayed to the right. The Editor is still under'+
+                      ' development.'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Inline and Block Formatting',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'You can format the article with inline and block' +
+                      ' formatting like bolding, italic, strike, underline and hyperlinks.',
+                    formats: [
+                      {type: 'strong', from: 65, to: 72},
+                      {type: 'em', from: 74, to: 80},
+                      {type: 's', from: 82, to: 88},
+                      {type: 'u', from: 90, to: 99},
+                      {type: 'a', attrs: {href: 'https://github.com/carbon/editor'}, from: 104, to: 114}
+                    ]
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Ordered and Unordered Lists',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.List({
+                    components: [
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item One'
+                      }),
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item Two'
+                      }),
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item Three'
+                      }),
+                    ]
+                  }),
+                  new carbon.List({
+                    tagName: carbon.List.ORDERED_LIST_TAG,
+                    components: [
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item One'
+                      }),
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item Two'
+                      }),
+                      new carbon.Paragraph({
+                        paragraphType: carbon.Paragraph.Types.ListItem,
+                        text: 'Item Three'
+                      }),
+                    ]
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Images',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Figure({
+                    src: 'https://octodex.github.com/images/daftpunktocat-guy.gif',
+                    caption: 'Source: octodex.github.com'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'You can also insert images by ' +
+                      'pasting an image URL in a new line and hitting enter.'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Undo-Redo Manager',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'The editor also includes a built-in undo-redo' +
+                      ' manager so you can work freely without losing edits.'
+                  }),
+                  new carbon.Figure({
+                    src: 'https://octodex.github.com/images/mummytocat.gif',
+                    caption: 'Source: octodex.github.com'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Embedding YouTube Videos',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'The editor will also recognize YouTube links pasted in a' +
+                      ' new line after you hit enter and insert a YouTube player.'
+                  }),
+                  new carbon.EmbeddedComponent({
+                    url: 'https://www.youtube.com/watch?v=JGhoLcsr8GA',
+                    provider: 'embedly',
+                    caption: 'Macklemore & Ryan Lewis - Downtown (Official Music Video)'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Serializing and Deserializing Article',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'The editor also exposes a getJSONModel and fromJSON methods' +
+                        ' to allow clients to persist the article model and recreate it for' +
+                        ' further editing. For example, this demo page store changes in' +
+                        ' localStorage and retreive it to recreate the saved article when' +
+                        ' you revisit the demo page. Try making changes and refresh the page.',
+                    formats: [
+                        {type: 'em', from: 26, to: 38},
+                        {type: 'em', from: 43, to: 51},
+                        {type: 'strong', from: 279, to: 318},
+                    ]
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Custom Components and Extensions',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'Developers can create custom components to extend the editor' +
+                        ' two ways you can extend the editor are: RegEx Matching and' +
+                        ' Toolbelt Button.',
+                    formats: [
+                        {type: 'strong', from: 101, to: 115},
+                        {type: 'strong', from: 120, to: 135},
+                    ]
+                  }),
+                  new carbon.Paragraph({
+                    text: 'By registering a regex with the editor, your extension/component can' +
+                        ' be notified and do custom work. For example, GiphySearch' +
+                        ' (enabled in this demo) allows the users to insert GIFs from' +
+                        ' Giphy APIs into the editor. Try it out, on a new paragraph' +
+                        ' type: "+giphy hello" (without quotes) and hit enter.',
+                    formats: [
+                        {type: 'em', from: 104, to: 118},
+                        {type: 'a', from: 179, to: 184, attrs: {href: 'http://giphy.com'}},
+                        {type: 'strong', from: 207, to: 289},
+                    ]
+                  }),
+                  new carbon.Figure({
+                    src : "http://media.giphy.com/media/CnpgcGr2MQbwQ/giphy.gif",
+                  }),
+                  new carbon.Paragraph({
+                    text: 'A component can also add action(s) to the toolbelt toolbar.' +
+                        ' The toolbelt toolbar appears when you click the + button on' +
+                        ' the block toolbar that appears above the focused paragraph.' +
+                        ' For example, the UploadExtension (enabled in this demo)' +
+                        ' registers a "Upload Photo" action that allows it to handle' +
+                        ' uploading photos and inserting them.',
+                  })
+                ]
+              })
+            ]
+          })]
+        });
+      }
+
+      var editor = new carbon.Editor(
+          document.getElementById('editor'), {
+            article: demoArticle,
+            modules: [
+              carbon.EmbeddedComponent,
+            ]
+          });
+      editor.install(carbon.FormattingExtension);
+      editor.install(carbon.LayoutingExtension);
+
+      editor.install(carbon.CodeEditingExtension, {
+        toolbarNames: [
+          carbon.FormattingExtension.BLOCK_TOOLBAR_NAME,
+        ],
+        editorConfig: {
+          ComponentClass: carbon.MonacoEditor,
+          params: {
+            scriptPath: 'node_modules/monaco-editor/min/vs',
+          },
+        }
+      });
+      var uploadManager = new carbon.UploadManager(editor, {});
+      editor.install(carbon.FilePicker, {
+        uploadManager: uploadManager,
+        toolbarNames: [
+          carbon.FormattingExtension.BLOCK_TOOLBAR_NAME,
+          carbon.LayoutingExtension.TOOLBAR_NAME,
+        ],
+      });
+      editor.install(carbon.DragDropFiles, {
+        uploadManager: uploadManager,
+      });
+
+      editor.install(carbon.ToolbeltExtension);
+      editor.install(carbon.SelfieExtension, {
+        uploadManager: uploadManager,
+        toolbarNames: [
+          carbon.ToolbeltExtension.TOOLBELT_TOOLBAR_NAME
+        ],
+      });
+      editor.install(carbon.GiphySearch, {
+        apiKey: 'dc6zaTOxFJmzC',
+      });
+      var noEmbedProivder = new carbon.NoembedProvider();
+      editor.install(carbon.EmbeddingExtension, {
+        embedProviders: {
+          noembed: noEmbedProivder,
+          carbon: new carbon.CarbonEmbedProvider(),
+          fallback: noEmbedProivder,
+          // embedly: new carbon.EmbedlyProvider({
+          //   apiKey: '46c6ad376b1343359d774c5d8a940db7'
+          // }),
+        },
+        toolbarNames: [
+          carbon.ToolbeltExtension.TOOLBELT_TOOLBAR_NAME
+        ],
+        ComponentClass: carbon.EmbeddedComponent
+      });
+
+      editor.install(carbon.LinkEmbeddingExtension, {
+        parsingService: new carbon.CarbonParser({}),
+      });
+
+
+      editor.render();
+
+      var model = document.getElementById('model-viewer');
+      editor.addEventListener('change', function(event) {
+        model.innerHTML = JSONTree.create(editor.getJSONModel());
+        localStorage.setItem('article', JSON.stringify(editor.getJSONModel()));
+      });
+      model.innerHTML = JSONTree.create(editor.getJSONModel());
+
+      // TODO(mkhatib): Create a small helper app to support the demo
+      // and provide a better uploading capability.
+      editor.addEventListener('attachment-added', function(event){
+        var attachment = event.detail.attachment;
+        var file = attachment.file;
+
+        if (!file && attachment.dataUri) {
+          var dataUri = attachment.dataUri;
+          var timestamp = (new Date()).getTime();
+          var name = 'selfie-' + timestamp;
+          var imageFormat = '';
+          var match = dataUri.match(/^data\:image\/(\w+)/);
+          if (match) {
+            imageFormat = match[1];
+          } else {
+            throw 'Cannot locate image format in Data URI';
+          }
+
+          // extract raw base64 data from Data URI
+          var rawImageData = dataUri.replace(
+              /^data\:image\/\w+\;base64\,/, '');
+          var file = new Blob(
+              [Webcam.base64DecToArr(rawImageData)],
+              {type: 'image/'+imageFormat, name: name});
+          file.name = name;
+        }
+
+        GCS.insertObject(file, function(resp) {
+          attachment.setAttributes({
+            src: resp.mediaLink,
+            caption: 'Uploaded to GCS Bucket, this is temp for demo sake and uploaded images will be deleted regularly.'
+          });
+          editor.dispatchEvent(new Event('change'));
+        });
+      });
+    </script>
+  </body>
+</html>

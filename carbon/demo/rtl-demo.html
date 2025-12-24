@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Editor demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./assets/normalize.css" />
+    <link rel="stylesheet" href="./assets/main.css" />
+    <link rel="stylesheet" href="../dist/carbon.css" />
+    <link href="libs/json-tree/css/jsontree.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="libs/json-tree/jsontree.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+      <div id="editor" style="direction: rtl;">
+      </div>
+      <!--
+        Print side by side the internal model to illustrate how Manshar Editor
+        store and updates the model.
+
+        TODO(mkhatib):
+        Possibly also allow editing the model and reflecting that as DOM
+        changes in the editor.
+       -->
+      <pre id="model-viewer">
+      </pre>
+    </div>
+
+    <script src="libs/webcamjs/webcam.js"></script>
+    <script src="../dist/carbon.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script src="./assets/gcs.js"></script>
+    <script type="text/javascript">
+      GCS.init({
+        clientId: '950846180877-cqmh4098gben0k46d740ibdvrp46cf14.apps.googleusercontent.com',
+        bucket: 'carbon-demo-user-uploads',
+        project: 'manshar-backend',
+        group: '',
+        apiKey: 'AIzaSyBmND_wkbPmOumUIWlO4Ew9QU52gSvfLD8'
+      });
+    </script>
+    <script>
+      carbon.MonacoEditor.setScriptPath('node_modules/monaco-editor/min/vs', true);
+      var demoArticle;
+      var storedArticle = localStorage.getItem('article-ar');
+      if (storedArticle) {
+        try {
+          demoArticle = carbon.Article.fromJSON(JSON.parse(storedArticle));
+        } catch (e) {
+          console.error('Error with the loading saved article.' +
+              'This is probably due to backward-incompatability.');
+        }
+      }
+
+      if (!demoArticle) {
+        demoArticle = new carbon.Article({
+          sections: [new carbon.Section({
+            components: [
+              new carbon.Layout({
+                components: [
+                  new carbon.Paragraph({
+                    placeholderText: 'كاربون',
+                    text: 'مرحباً بك في المحرر',
+                    paragraphType: carbon.Paragraph.Types.MainHeader
+                  }),
+                  new carbon.Paragraph({
+                    placeholderText: 'This is just a demo.',
+                    text: 'محرر مقالات في المتصفح',
+                    paragraphType: carbon.Paragraph.Types.ThirdHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'بُني المحرر مع نموذج داخلي للمقال، النموذج معروض في الحزء الأيمن' +
+                      ' من الصفحة. المحرر ما زال قيد التطوير.'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'تنسيق الفقرات والنص',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'يمكنك تنسيق الفقرات والنص مثل خط غامق، مائل، مشطوب، مخطط أو إضافة روابط.',
+                    formats: [
+                      {type: 'strong', from: 33, to: 37},
+                      {type: 'em', from: 39, to: 44},
+                      {type: 's', from: 45, to: 50},
+                      {type: 'u', from: 52, to: 56},
+                      {type: 'a', attrs: {href: 'https://github.com/carbon/editor'}, from: 65, to: 72}
+                    ]
+                  }),
+                  new carbon.Paragraph({
+                    text: 'صور',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Figure({
+                    src: 'https://octodex.github.com/images/daftpunktocat-guy.gif'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'يمكنك أيضاً ادخال صور عن طريق لصق الرابط في سطر جديد والضغط على إنتر.'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'إلغاء وإعادة مع تاريخ التعديلات',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'المحرر يتتبع جميع التغييرات ويحتوي على خاصية إلغاى وإعادة عمل الفعل.'
+                  }),
+                  new carbon.Figure({
+                    src: 'https://octodex.github.com/images/mummytocat.gif'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'فيديوهات يوتيوب',
+                    paragraphType: carbon.Paragraph.Types.SecondaryHeader
+                  }),
+                  new carbon.Paragraph({
+                    text: 'المحرر سوف يلاحظ عندما تلصق رابط من يوتيوب وسدخل فيديو بدل الرابط عند الضغط إنتر.'
+                  }),
+                  new carbon.EmbeddedComponent({
+                    url: 'https://www.youtube.com/watch?v=JGhoLcsr8GA',
+                    provider: 'embedly',
+                    caption: 'ماكلمور - وسط البلد'
+                  }),
+                  new carbon.Paragraph({
+                    text: 'مصدر الصور من أكتوديكس',
+                    formats: [
+                      {type: 'em', from: 0, to: 13},
+                      {type: 'a', attrs: {href: 'https://octodex.github.com/'}, from: 14, to: 22}
+                    ]
+                  }),
+                ]
+              })
+            ]
+          })]
+        });
+      }
+
+      var editor = new carbon.Editor(
+          document.getElementById('editor'), {
+            rtl: true,
+            locale: 'ar',
+            article: demoArticle,
+            modules: [
+              carbon.EmbeddedComponent
+            ]
+          });
+      editor.install(carbon.FormattingExtension);
+      editor.install(carbon.LayoutingExtension);
+
+      editor.install(carbon.CodeEditingExtension, {
+        toolbarNames: [
+          carbon.FormattingExtension.BLOCK_TOOLBAR_NAME,
+        ],
+        editorConfig: {
+          ComponentClass: carbon.MonacoEditor,
+          params: {
+            scriptPath: 'node_modules/monaco-editor/min/vs',
+          },
+        }
+      });
+      var uploadManager = new carbon.UploadManager(editor, {});
+      editor.install(carbon.FilePicker, {
+        uploadManager: uploadManager,
+        toolbarNames: [
+          carbon.FormattingExtension.BLOCK_TOOLBAR_NAME,
+          carbon.LayoutingExtension.TOOLBAR_NAME,
+        ],
+      });
+      editor.install(carbon.DragDropFiles, {
+        uploadManager: uploadManager,
+      });
+
+      editor.install(carbon.ToolbeltExtension);
+      editor.install(carbon.SelfieExtension, {
+        uploadManager: uploadManager,
+        toolbarNames: [
+          carbon.ToolbeltExtension.TOOLBELT_TOOLBAR_NAME
+        ],
+      });
+      editor.install(carbon.GiphySearch, {
+        apiKey: 'dc6zaTOxFJmzC',
+      });
+      editor.install(carbon.EmbeddingExtension, {
+        embedProviders: {
+          carbon: new carbon.CarbonEmbedProvider({
+          }),
+          embedly: new carbon.EmbedlyProvider({
+            apiKey: '46c6ad376b1343359d774c5d8a940db7'
+          }),
+        },
+        toolbarNames: [
+          carbon.ToolbeltExtension.TOOLBELT_TOOLBAR_NAME
+        ],
+        ComponentClass: carbon.EmbeddedComponent
+      });
+
+      editor.install(carbon.LinkEmbeddingExtension, {
+        parsingService: new carbon.CarbonParser({}),
+      });
+
+
+      editor.render();
+
+      var model = document.getElementById('model-viewer');
+      editor.addEventListener('change', function(event) {
+        model.innerHTML = JSONTree.create(editor.getJSONModel());
+        localStorage.setItem('article-ar', JSON.stringify(editor.getJSONModel()));
+      });
+      model.innerHTML = JSONTree.create(editor.getJSONModel());
+
+      // TODO(mkhatib): Create a small helper app to support the demo
+      // and provide a better uploading capability.
+      editor.addEventListener('attachment-added', function(event){
+        var attachment = event.detail.attachment;
+        var file = attachment.file;
+
+        if (!file && attachment.dataUri) {
+          var dataUri = attachment.dataUri;
+          var timestamp = (new Date()).getTime();
+          var name = 'selfie-' + timestamp;
+          var imageFormat = '';
+          var match = dataUri.match(/^data\:image\/(\w+)/);
+          if (match) {
+            imageFormat = match[1];
+          } else {
+            throw 'Cannot locate image format in Data URI';
+          }
+
+          // extract raw base64 data from Data URI
+          var rawImageData = dataUri.replace(
+              /^data\:image\/\w+\;base64\,/, '');
+          var file = new Blob(
+              [Webcam.base64DecToArr(rawImageData)],
+              {type: 'image/'+imageFormat, name: name});
+          file.name = name;
+        }
+
+        GCS.insertObject(file, function(resp) {
+          attachment.setAttributes({
+            src: resp.mediaLink,
+            caption: 'تم تحميل هذه الصورة على ملف مؤقت. سيتم حذف جميع الملفات المحملة على هذا العرض بانتظام.'
+          });
+          editor.dispatchEvent(new Event('change'));
+        });
+      });
+    </script>
+  </body>
+</html>

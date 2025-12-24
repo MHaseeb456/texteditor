@@ -1,0 +1,621 @@
+/**
+ * Main Styles for Carbon.
+ */
+.carbon {
+  outline: none;
+}
+
+.carbon h1 {
+  margin: 0;
+}
+
+.carbon p {
+  margin: 2em 0;
+  line-height: 1.5;
+}
+
+.carbon figcaption.empty-paragraph {
+  display: none;
+}
+
+.carbon-editor {
+  outline: none;
+}
+
+[contenteditable] {
+  outline: none;
+}
+
+.carbon-editor .carbon [placeholder].show-placeholder:after {
+  content: attr(placeholder);
+  cursor: text;
+  display: inline; /* For Firefox */
+  color: #c0c0c0;
+}
+
+.carbon .layout-single-column,
+.carbon .layout-float-left,
+.carbon .layout-float-right {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.carbon .layout-bleed {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carbon .layout-stage {
+  width: 100%;
+}
+
+.carbon .layout-float-left figure,
+.carbon .layout-float-left .carbon-code {
+  float: left;
+  margin: 0;
+  margin-right: 2em;
+  width: 300px;
+}
+
+.carbon .layout-float-right figure,
+.carbon .layout-float-right .carbon-code {
+  float: right;
+  margin: 0;
+  margin-left: 2em;
+  width: 300px;
+}
+
+.carbon .layout-responsive-grid {
+  font-size: 0;
+  flex-flow: row wrap;
+  align-items: center;
+  display: flex;
+  padding: 0 3px;
+}
+
+.carbon .layout-responsive-grid figure,
+.carbon .layout-responsive-grid .carbon-code {
+  flex: auto;
+  width: 30%;
+  align-self: flex-start;
+}
+
+.carbon .layout-responsive-grid .carbon-code {
+  align-self: flex-start;
+}
+
+.carbon .layout-responsive-grid figure img {
+  width: 100%;
+  height: auto;
+  padding: 4px;
+}
+
+.carbon .layout-responsive-grid figure iframe {
+  margin: 4px;
+}
+
+.carbon-editor .carbon .layout-responsive-grid figure figcaption {
+  margin-bottom: 3px; /* account for transparent border */
+}
+.carbon .layout-responsive-grid figure figcaption {
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  color: #fff;
+  background: linear-gradient(0, rgba(0,0,0,0.5), rgba(0,0,0,0));
+  text-align: center;
+  width: 100%;
+}
+
+.inner-container {
+  position: relative;
+}
+
+.carbon .carbon-code .inner-container,
+.carbon .carbon-code .embed-container {
+  height: 100%;
+}
+
+.carbon .carbon-code-read {
+  overflow-x: hidden;
+  background-color: #1e1e1e;
+  font-size: 14px;
+  color: #D4D4D4;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding-left: 44px;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.carbon figure {
+  position: relative;
+  margin: 2em 0;
+  text-align: center;
+  /* To fix the position of toolbar when div is floated */
+  display: inline-block;
+  width: 100%;
+}
+
+.carbon figure .image-container {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+}
+
+.carbon figure .image-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.carbon figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+.carbon figure .selection-pointer {
+  width: 0;
+  height: 0;
+  content: ' ';
+  z-index: -1;
+  outline: none;
+  line-height: 0;
+  font-size: 0;
+}
+
+.carbon figure figcaption {
+  color: #ccc;
+  font-style: italic;
+  font-size: 0.8em;
+  outline: none;
+  padding: 0.5em 0;
+}
+
+.carbon figure .inner-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.carbon figure .ratio-container {
+  height: 0;
+}
+
+.carbon figure .embed-container {
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carbon figure .embed-container.responsive-video iframe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+}
+
+.carbon .embed-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.carbon figure .ratio-container iframe,
+.carbon figure .ratio-container object,
+.carbon figure .ratio-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.carbon .embed-overlay,
+.carbon .embed-overlay {
+  z-index: 9;
+}
+
+.carbon .editor-selected .embed-overlay {
+  display: none;
+}
+
+.carbon figure iframe {
+  display: inline-block !important;
+}
+
+.carbon figure .noembed-embed .noembed-wrapper {
+  box-shadow: 0 1px 5px -2px #333;
+}
+
+.carbon figure .noembed-gist h3 {
+  background: #DDDDDD;
+  margin: 0;
+  padding: 0.1em 0 1em;
+}
+
+.carbon figure .noembed-embed .gist-file {
+  box-shadow: 0 1px 5px -2px #333;
+  padding: 1em;
+  font-size: 0.55em;
+  text-align: left;
+  background-color: #f5f5f5;
+}
+
+.carbon figure .noembed-embed .gist-description {
+  font-size: 0.9em;
+  text-align: center;
+  padding: 1em;
+  background: #ddd;
+  color: #333;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.carbon figure .noembed-embed .noembed-meta-info {
+  text-align: center;
+  width: 100%;
+  background: #ddd;
+  font-size: 0.7em;
+  box-shadow: 0 1px 5px -1px #333;
+}
+
+.carbon figure .noembed-embed a {
+  color: #333;
+}
+
+.carbon figure .noembed-embed img,
+.carbon figure.editor-selected .noembed-embed img {
+  border: none !important;
+}
+
+.carbon-editor .carbon p,
+.carbon-editor .carbon h1,
+.carbon-editor .carbon h2,
+.carbon-editor .carbon h3,
+.carbon-editor .carbon pre {
+  box-sizing: border-box;
+  border-top: 1px solid transparent !important;
+}
+
+.carbon-editor .carbon figure img,
+.carbon-editor .carbon figure .inner-container {
+  box-sizing: border-box;
+  border: 3px solid transparent !important;
+  padding: 0px;
+}
+
+.carbon-editor .carbon figure.editor-selected img,
+.carbon-editor .carbon .editor-selected .inner-container {
+  border: 3px solid #FF5722 !important;
+}
+
+.carbon-editor .carbon .over {
+  border-top: 1px dashed dodgerblue !important;
+}
+
+.carbon-editor .carbon figure img.over,
+.carbon-editor .carbon figure.editor-selected img.over,
+.carbon-editor .carbon .embed-overlay.over {
+  border: 3px dashed dodgerblue !important;
+  transition: transform .5s;
+  transform: scale(0.9);
+}
+
+.carbon-editor .carbon figure img.over.over-right,
+.carbon-editor .carbon figure.editor-selected img.over.over-right,
+.carbon-editor .carbon .embed-overlay.over.over-right {
+  border-right: 3px dashed #FF5722 !important;
+}
+
+.carbon-editor .carbon figure img.over.over-left,
+.carbon-editor .carbon figure.editor-selected img.over.over-left,
+.carbon-editor .carbon .embed-overlay.over.over-left {
+  border-left: 3px dashed #FF5722 !important;
+}
+
+.carbon-editor .dragging {
+  opacity: 0.4;
+  transition: transform .2s;
+  transform: scale(0.8);
+}
+
+.carbon-editor [draggable] {
+  cursor: move;
+}
+
+#carbon-off-screen {
+  position: absolute;
+  left: -99999px;
+  top: -99999px;
+}
+
+.carbon-attachment {
+  position: relative;
+}
+
+.carbon-attachment-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.carbon-attachment-status-container {
+  position: relative;
+  width: 100%;
+  font-size: 12px;
+}
+
+.carbon-attachment-status-message {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 0;
+}
+
+.done .carbon-attachment-status-message {
+  display: none;
+}
+
+.carbon-attachment-inner.done .loader {
+  background: none;
+}
+
+.carbon-attachment-inner .loader {
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-left-color: #FF5722;
+  background: rgba(0,0,0,0.2);
+  animation-name: loader-spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.carbon-attachment-inner .loader {
+}
+
+.carbon-attachment-inner .loader,
+.carbon-attachment-inner .loader:after {
+  border-radius: 50%;
+  padding-bottom: 25%;
+  width: 25%;
+  box-sizing: content-box;
+}
+
+.carbon-attachment-inner .loader .checkmark {
+  display: none;
+}
+
+.carbon-attachment-inner.done .loader {
+  -webkit-animation: none;
+  animation: none;
+  border-color: #FF5722;
+  transition: border 500ms ease-out;
+}
+
+.carbon-attachment-inner.error {
+  pointer-events: initial;
+}
+
+.carbon-attachment-inner .retry-button {
+  display: none;
+  font-size: 1em;
+  background: #ff5722;
+  border: none;
+  color: #fff;
+  padding: 0.5em 2em;
+  margin-top: 1em;
+}
+
+.carbon-attachment-inner.error .retry-button {
+  display: block;
+}
+
+.carbon-attachment-inner.error .loader {
+  -webkit-animation: none;
+  animation: none;
+  border-color: #d81a1a;
+  background-color: #d81a1a;
+  transition: border 500ms ease-out;
+}
+
+.carbon-attachment-inner.done .loader .checkmark {
+  display: block;
+}
+
+.carbon-attachment-inner.done .loader .checkmark.draw:after {
+  animation-duration: 800ms;
+  animation-timing-function: ease;
+  animation-name: checkmark;
+  transform: scaleX(-1) rotate(135deg);
+}
+
+.carbon-attachment-inner.done .loader .checkmark:after {
+  /*opacity: 1;
+  height: 4em;
+  width: 2em;
+  transform-origin: left top;
+  border-right: 5px solid #FF5722;
+  border-top: 5px solid #FF5722;*/
+  /*border-right: 2px solid #5cb85c;*/
+  /*border-top: 2px solid #5cb85c;*/
+  /*content: '';
+  left: 2em;
+  top: 4em;
+  position: absolute;*/
+
+  opacity: 1;
+  height: 60%;
+  width: 25%;
+  transform-origin: left top;
+  border-right: 3px solid #FF5722;
+  border-top: 3px solid #FF5722;
+  /* border-right: 2px solid #5cb85c; */
+  /* border-top: 2px solid #5cb85c; */
+  content: '';
+  left: calc(50% - 35%);
+  top: 55%;
+  position: absolute;
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes checkmark {
+  0% {
+    height: 0;
+    width: 0;
+    opacity: 1;
+  }
+  20% {
+    height: 0;
+    width: 25%;
+    opacity: 1;
+  }
+  40% {
+    height: 60%;
+    width: 25%;
+    opacity: 1;
+  }
+  100% {
+    height: 60%;
+    width: 25%;
+    opacity: 1;
+  }
+}
+
+
+.drag-drop-anchor {
+  top: -99999px;
+  position: absolute;
+  border: 1px dashed dodgerblue;
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.carbon .carbon-code {
+  direction: ltr;
+  margin: 1em 0;
+}
+
+.carbon-editor .carbon-code {
+  position: relative;
+}
+
+.carbon-editor .carbon-code .component-config-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.6em;
+  margin: 0.5em;
+}
+
+
+.carbon.rtl .embedded-link a {
+  text-align: right;
+}
+
+.carbon .embedded-link a {
+  display: flex;
+  align-items: center;
+  background: #fafafa;
+  color: #1b1b1b;
+  box-shadow: 0 1px 5px -2px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.carbon .embedded-link a .thumb-container {
+  min-width: 150px;
+  max-width: 150px;
+  height: 150px;
+}
+
+.carbon .embedded-link a .url-meta {
+  color: #ccc;
+  font-size: 0.5em;
+}
+
+.carbon .embedded-link a .thumb-container,
+.carbon .embedded-link a .details-container {
+  padding: 1em;
+}
+
+.carbon .embedded-link a .details-container {
+  padding-left: 0;
+  padding-right: 1em;
+}
+
+.carbon.rtl .embedded-link a .details-container {
+  padding-right: 0;
+  padding-left: 1em;
+}
+
+.carbon .embedded-link a .thumb-container img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.carbon .embedded-link a h3,
+.carbon .embedded-link a p {
+  margin: 0;
+}
+
+.carbon .embedded-link a p {
+  color: #6b6b6b;
+  font-size: 0.8em;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+@media (max-width: 500px) {
+  .carbon .layout-float-left figure,
+  .carbon .layout-float-right .carbon-code {
+    float: none;
+    margin-right: auto;
+    width: auto;
+  }
+
+  .carbon .layout-float-right figure,
+  .carbon .layout-float-right .carbon-code {
+    float: none;
+    margin-left: 2em;
+    width: auto;
+  }
+}
+

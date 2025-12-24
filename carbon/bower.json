@@ -1,0 +1,17 @@
+{
+  "name": "carbon",
+  "version": "0.2.5",
+  "author": "Manshar",
+  "main": "dist/carbon.min.js",
+  "license": "Simplified BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "customevent-polyfill": "~1.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Editor demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./assets/normalize.css" />
+    <link rel="stylesheet" href="./assets/main.css" />
+    <link rel="stylesheet" href="../dist/carbon.css" />
+    <link href="libs/json-tree/css/jsontree.css" rel="stylesheet">
+    <script src="libs/json-tree/jsontree.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+      <div id="article-preview">
+      </div>
+    </div>
+
+    <script src="libs/webcamjs/webcam.js"></script>
+    <script src="../dist/carbon.js"></script>
+    <script>
+      carbon.MonacoEditor.setScriptPath('node_modules/monaco-editor/min/vs', true);
+      var noembedProvider = new carbon.NoembedProvider();
+      carbon.Loader.register('embedProviders', {
+        noembed: noembedProvider,
+        carbon: new carbon.CarbonEmbedProvider({}),
+        fallback: noembedProvider,
+      });
+
+      var demoArticle;
+      var storedArticle = localStorage.getItem('article');
+      if (storedArticle) {
+        try {
+          demoArticle = carbon.Article.fromJSON(JSON.parse(storedArticle));
+        } catch (e) {
+          console.error('Error with the loading saved article.' +
+              'This is probably due to backward-incompatability.');
+        }
+      }
+
+      if (demoArticle) {
+        var articlePreview = document.getElementById('article-preview');
+        demoArticle.render(articlePreview);
+      }
+    </script>
+  </body>
+</html>
