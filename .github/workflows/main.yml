@@ -11,6 +11,10 @@ jobs:
       - name: node version
         run: node -v
       - name: install dependencies
-        run: npm install
+        run: |
+          cd canbox
+          npm install
       - name: Run test case
-        run: npm run test
+        run: |
+          cd canbox
+          npm run test
