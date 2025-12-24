@@ -12,9 +12,9 @@ jobs:
         run: node -v
       - name: install dependencies
         run: |
-          cd canbox
+          cd carbon
           npm install
       - name: Run test case
         run: |
-          cd canbox
+          cd carbon
           npm run test
