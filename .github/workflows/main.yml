@@ -11,6 +11,6 @@ jobs:
       - name: node version
         run: node -v
       - name: install dependencies
-        run: npm ci
+        run: npm install
       - name: Run test case
         run: npm run test
