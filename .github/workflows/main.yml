@@ -1,0 +1,16 @@
+name: deploy text editor app
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get code
+        uses: actions/checkout@v6.0.1
+      - name: install node js
+        uses: actions/setup-node@v6.1.0
+      - name: node version
+        run: node -v
+      - name: install dependencies
+        run: npm ci
+      - name: Run test case
+        run: npm run test
